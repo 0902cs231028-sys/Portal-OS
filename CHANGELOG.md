@@ -1,6 +1,9 @@
 ```markdown
 # 📜 Changelog
 
+## [Auto-Log] - 2025-12-28
+- **🐘 Backend (PHP):** 🔹 Added var `bridgeUrl`, 🔹 Added var `MatrixEngine` in `vault.php`
+
 
 ## [Auto-Log] - 2025-12-28
 - **🤖 GitHub Actions:** ⚡ Update in `changelog.yml`
