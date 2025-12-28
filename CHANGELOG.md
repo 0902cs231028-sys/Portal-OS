@@ -1,8 +1,6 @@
 ```markdown
 # 📜 Changelog
 
-## [Auto-Log] - 2025-12-28
-- **🖼️ Assets:** 🗑️ Deleted `profile_2_1766890918.jpg`
 
 ## [Auto-Log] - 2025-12-28
 - **🤖 GitHub Actions:** ⚡ Update in `changelog.yml`
@@ -10,8 +8,6 @@
 ## [Auto-Log] - 2025-12-28
 - **🗄️ Database:** ⚡ Update in `db.sql`
 
-## [Auto-Log] - 2025-12-28
-- **🤖 GitHub Actions:** 🎉 Created `changelog.yml`
 
 All notable changes to the **Portal-OS** architecture will be documented here.
 
