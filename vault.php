@@ -15,6 +15,7 @@ $vault_query = mysqli_query($conn, "SELECT * FROM vault_items WHERE student_id =
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <style>
         body { background: #020617; color: #f8fafc; font-family: 'Inter', sans-serif; }
         .cyber-grid { 
@@ -29,7 +30,6 @@ $vault_query = mysqli_query($conn, "SELECT * FROM vault_items WHERE student_id =
         .custom-scrollbar::-webkit-scrollbar { width: 5px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
         
-        /* Smooth fade for the modal */
         #linkModal { transition: opacity 0.3s ease; }
     </style>
 </head>
@@ -67,7 +67,7 @@ $vault_query = mysqli_query($conn, "SELECT * FROM vault_items WHERE student_id =
                 </div>
                 
                 <div class="mt-12 flex gap-4">
-                    <button onclick="openMatrix('api/view_vault.php?path=<?php echo urlencode($item['google_drive_link']); ?>', '<?php echo addslashes($item['doc_title']); ?>')" 
+                    <button onclick="openMatrix('<?php echo htmlspecialchars($item['google_drive_link']); ?>', '<?php echo addslashes($item['doc_title']); ?>')" 
                             class="flex-1 py-4 bg-slate-900 border border-white/5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-all flex items-center justify-center gap-2">
                         <i data-lucide="eye" class="w-4 h-4 text-blue-500"></i> Decrypt_&_View
                     </button>
@@ -127,52 +127,111 @@ $vault_query = mysqli_query($conn, "SELECT * FROM vault_items WHERE student_id =
                     <p class="text-[9px] text-emerald-500 font-mono tracking-widest uppercase">Decryption_Successful</p>
                 </div>
             </div>
-            <button onclick="closeMatrix()" class="px-8 py-3 bg-red-600/10 text-red-500 border border-red-500/20 rounded-xl font-black text-[10px]">CLOSE_SESSION</button>
+            
+            <div class="flex items-center gap-4">
+                <a id="matrixDownload" href="#" target="_blank" class="px-6 py-3 bg-blue-600/10 text-blue-500 border border-blue-500/20 rounded-xl font-black text-[10px] hover:bg-blue-600/20 transition-all flex items-center gap-2">
+                    <i data-lucide="download" class="w-3 h-3"></i> EXTRACT
+                </a>
+
+                <button onclick="closeMatrix()" class="px-8 py-3 bg-red-600/10 text-red-500 border border-red-500/20 rounded-xl font-black text-[10px] hover:bg-red-600/20 transition-all">
+                    CLOSE_SESSION
+                </button>
+            </div>
         </div>
         <iframe id="matrixFrame" class="w-full h-full border-none bg-black/20" src=""></iframe>
     </div>
 
-    <script src="js/matrix_viewer.js"></script>
     <script>
         lucide.createIcons();
         function openLinkModal() { document.getElementById('linkModal').classList.remove('hidden'); }
         function closeLinkModal() { document.getElementById('linkModal').classList.add('hidden'); }
         
-        // --- SMART DETECTION ENGINE ---
+        // --- FIXED MATRIX ENGINE (Internalized to ensure parameters match) ---
+        const MatrixEngine = {
+            viewer: document.getElementById('matrixViewer'),
+            frame: document.getElementById('matrixFrame'),
+            title: document.getElementById('matrixFileName'),
+            download: document.getElementById('matrixDownload'),
+
+            open: function(filePath, fileName) {
+                // HUD Setup
+                this.title.innerText = `[RECON] DECRYPTING: ${fileName.toUpperCase()}...`;
+                this.title.style.color = "#3b82f6"; 
+
+                // FIX: Use 'path' to match view_vault.php's requirement
+                const bridgeUrl = `api/view_vault.php?path=${encodeURIComponent(filePath)}`;
+                
+                // Set Download Link
+                if(this.download) {
+                    this.download.href = bridgeUrl; // No download=true needed, bridge sends headers
+                }
+
+                // Animation
+                this.viewer.classList.remove('hidden');
+                if(typeof gsap !== 'undefined') {
+                    gsap.fromTo(this.viewer, 
+                        { opacity: 0, scale: 1.1, backdropFilter: "blur(0px)" }, 
+                        { duration: 0.5, opacity: 1, scale: 1, backdropFilter: "blur(20px)", ease: "expo.out" }
+                    );
+                }
+                document.body.style.overflow = 'hidden';
+
+                // Load Content
+                this.frame.src = bridgeUrl;
+
+                this.frame.onload = () => {
+                    this.title.innerText = fileName.toUpperCase();
+                    this.title.style.color = "#10b981"; 
+                    this.title.classList.add('animate-pulse');
+                };
+            },
+
+            close: function() {
+                if(typeof gsap !== 'undefined') {
+                    gsap.to(this.viewer, { 
+                        duration: 0.4, opacity: 0, scale: 0.9, ease: "power4.in",
+                        onComplete: () => {
+                            this.viewer.classList.add('hidden');
+                            this.frame.src = ""; 
+                            document.body.style.overflow = 'auto';
+                            this.title.classList.remove('animate-pulse');
+                        }
+                    });
+                } else {
+                    this.viewer.classList.add('hidden');
+                    this.frame.src = "";
+                    document.body.style.overflow = 'auto';
+                }
+            }
+        };
+
+        window.openMatrix = (url, name) => MatrixEngine.open(url, name);
+        window.closeMatrix = () => MatrixEngine.close();
+
+        // --- UPLOAD LOGIC ---
         function smartDetect(input) {
             if(input.files && input.files[0]) {
                 const file = input.files[0];
                 const name = file.name;
                 const nameLower = name.toLowerCase();
 
-                // 1. Update Display Name
                 document.getElementById('fileNameDisplay').innerText = name;
                 document.getElementById('fileNameDisplay').classList.remove('text-blue-400');
                 document.getElementById('fileNameDisplay').classList.add('text-white');
 
-                // 2. Auto-Fill Title (Remove extension & underscores)
                 const cleanName = name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
                 const titleInput = document.getElementById('vTitle');
-                if(!titleInput.value) { // Only auto-fill if empty
+                if(!titleInput.value) { 
                     titleInput.value = cleanName;
                 }
 
-                // 3. Auto-Select Category
                 const typeSelect = document.getElementById('vType');
+                if (nameLower.match(/(cert|course|aws|udemy|completion|degree)/)) typeSelect.value = "Certification";
+                else if (nameLower.match(/(intern|offer|letter|joining|job)/)) typeSelect.value = "Internship";
+                else if (nameLower.match(/(mark|grade|result|card|sem|academic)/)) typeSelect.value = "Academic";
+                else if (nameLower.match(/(project|report|doc|ppt)/)) typeSelect.value = "Project";
+                else if (nameLower.match(/(jpg|png|jpeg|img|photo)/)) typeSelect.value = "Image";
                 
-                if (nameLower.match(/(cert|course|aws|udemy|completion|degree)/)) {
-                    typeSelect.value = "Certification";
-                } else if (nameLower.match(/(intern|offer|letter|joining|job)/)) {
-                    typeSelect.value = "Internship";
-                } else if (nameLower.match(/(mark|grade|result|card|sem|academic)/)) {
-                    typeSelect.value = "Academic";
-                } else if (nameLower.match(/(project|report|doc|ppt)/)) {
-                    typeSelect.value = "Project";
-                } else if (nameLower.match(/(jpg|png|jpeg|img|photo)/)) {
-                    typeSelect.value = "Image";
-                }
-                
-                // Visual feedback that AI worked
                 typeSelect.classList.add('text-blue-400');
                 titleInput.classList.add('text-blue-400');
             }
