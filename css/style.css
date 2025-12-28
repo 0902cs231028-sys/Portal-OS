@@ -1,0 +1,142 @@
+/* * AETHERIS CORE v2.0 - Visual Identity Framework
+ * Design System: Brutalist Cyber-Minimalism
+ * Calibrated for RJIT Elite Node 2022-26
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@300;500;700&display=swap');
+
+:root {
+    --bg-deep: #020617;
+    --bg-slate: #0b1120;
+    --accent-blue: #3b82f6;
+    --accent-emerald: #10b981;
+    --accent-red: #ef4444;
+    --glass-border: rgba(255, 255, 255, 0.05);
+    --glass-bg: rgba(15, 23, 42, 0.4);
+    --text-primary: #f8fafc;
+    --text-muted: #64748b;
+    --glow-blue: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+/* 1. CORE LAYOUT & SCROLLING */
+body {
+    background-color: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar - High Fidelity */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    border: 1px solid transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-blue);
+    box-shadow: var(--glow-blue);
+}
+
+/* 2. GLASSMORPHISM ENGINE */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+    border-color: rgba(59, 130, 246, 0.2);
+    transform: translateY(-2px);
+}
+
+/* 3. TYPOGRAPHY & HUD */
+.architect-title {
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: -0.07em;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-style: italic;
+}
+
+.mono {
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.1em;
+}
+
+.text-glow-blue { text-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
+.text-glow-emerald { text-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
+
+/* 4. COMPONENT SPECIALTIES */
+.stat-card {
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.4), rgba(2, 6, 23, 0.8));
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.2), transparent);
+}
+
+/* Shimmer Button Logic */
+.shimmer-btn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.shimmer-btn::before {
+    content: '';
+    position: absolute;
+    top: -100%; left: -100%; width: 300%; height: 300%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
+    transform: rotate(45deg);
+    animation: shimmer 4s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translate(-100%, -100%) rotate(45deg); }
+    100% { transform: translate(100%, 100%) rotate(45deg); }
+}
+
+/* 5. APEX MATRIX & DYNAMIC HUD */
+.terminal-text {
+    color: var(--accent-emerald);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+}
+
+.cyber-grid {
+    background-image: 
+        linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px), 
+        linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+}
+
+/* Identity Animation for Roll Numbers */
+.roll-number-display {
+    background: rgba(59, 130, 246, 0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+    color: var(--accent-blue);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
