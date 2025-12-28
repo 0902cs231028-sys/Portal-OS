@@ -119,3 +119,5 @@ CREATE TABLE `campus_posts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 COMMIT;
+
+--- Import this file in mysql --- 
