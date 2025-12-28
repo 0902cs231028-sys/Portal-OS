@@ -16,7 +16,7 @@
 
 [![System Status](https://img.shields.io/website?url=https%3A%2F%2Fshiroonigami23.free.nf%2F&label=OPERATIONAL&style=for-the-badge&logo=instatus&logoColor=white&color=2ea44f)](https://shiroonigami23.free.nf/)
 [![Version](https://img.shields.io/badge/CORE_VERSION-v2.2-blue?style=for-the-badge&logo=semver&logoColor=white)](./CHANGELOG.md)
-[![License](https://img.shields.io/badge/LICENSE-MIT-gold?style=for-the-badge&logo=open-source-initiative&logoColor=white)](./LICENSE)
+[![License](https://img.shields.io/badge/LICENSE-MIT-gold?style=for-the-badge&logo=open-source-initiative&logoColor=white)](./LICENSE.md)
 
 <br>
 
@@ -180,7 +180,7 @@ Tracking the evolution of the Aetheris Core architecture.
 ### ⚖️ License
 **Portal-OS** is deployed under the **MIT License**. It is free for educational reconnaissance and modification.
 <br>
-[![License](https://img.shields.io/badge/READ_LICENSE-MIT-green?style=for-the-badge&logo=open-source-initiative&logoColor=white)](./LICENSE)
+[![License](https://img.shields.io/badge/READ_LICENSE-MIT-green?style=for-the-badge&logo=open-source-initiative&logoColor=white)](./LICENSE.md)
 
 ---
 <p align="center">
