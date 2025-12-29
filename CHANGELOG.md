@@ -2,6 +2,9 @@
 # 📜 Changelog
 
 ## [Auto-Log] - 2025-12-29
+- **⚡ Scripts:** 🗑️ Deleted `matrix_viewer.js`
+
+## [Auto-Log] - 2025-12-29
 - **🐘 Backend (PHP):** 🔹 Added var `result`, 🔹 Added var `res` in `campus_wall.php`
 
 ## [Auto-Log] - 2025-12-29
