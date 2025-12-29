@@ -2,6 +2,9 @@
 # 📜 Changelog
 
 ## [Auto-Log] - 2025-12-29
+- **🔌 API:** 🎉 Created `delete_bounty.php`
+
+## [Auto-Log] - 2025-12-29
 - **⚡ Scripts:** 🎉 Created `push_manager.js`
 
 ## [Auto-Log] - 2025-12-29
